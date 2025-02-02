@@ -1,7 +1,7 @@
+-- TODO
 -- REQUIREMENT 3.1
 -- After login, the system shall allow the registered user to reserve up to 3 tables by
 -- specifying the date and the preferred restaurant.
-
 CREATE OR REPLACE PROCEDURE reserve_table(user_email VARCHAR, restaurant_id INT, reservation_date DATE, table_id INT)
   LANGUAGE plpgsql
 AS $$

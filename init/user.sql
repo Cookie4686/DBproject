@@ -1,12 +1,12 @@
 -- REQUIREMENT 01
 -- The system shall allow a user to register by specifying the name, telephone number, email, and password
-CREATE OR REPLACE PROCEDURE register_user(name VARCHAR, phone VARCHAR, email VARCHAR, password VARCHAR)
+CREATE OR REPLACE PROCEDURE register_user(firstname VARCHAR,lastname VARCHAR, phone VARCHAR, email VARCHAR, password VARCHAR)
   LANGUAGE plpgsql
 AS $$
 BEGIN
-  INSERT INTO user_account(name, phone, email, password)
-  VALUES (name, phone, email, password);
-END; $$
+  INSERT INTO user_account(firstname, lastname, phone, email, password)
+  VALUES (firstname, lastname, phone, email, password);
+END; $$;
 
 -- REQUIREMENT 02
 -- THIS MAY NOT BE NEEDED (seem like a software level requirements
@@ -24,4 +24,4 @@ BEGIN
   ELSE
     RETURN TRUE;
   END IF;
-END; $$
+END; $$;

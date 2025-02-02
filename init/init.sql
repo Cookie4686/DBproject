@@ -14,26 +14,28 @@ CREATE TABLE restaurant(
       open_time TIME NOT NULL,
       close_time TIME NOT NULL,
       location VARCHAR(100),
-      UNIQUE(name, location)
+      owner_email VARCHAR(100),
+      UNIQUE(name, location),
+      CONSTRAINT fk_user FOREIGN KEY(owner_email) REFERENCES user_account(email)
 );
 CREATE TABLE restaurant_admin(
       restaurant_id SERIAL,
-      email VARCHAR(100),
-      PRIMARY KEY(restaurant_id, email),
+      admin_email VARCHAR(100),
+      PRIMARY KEY(restaurant_id, admin_email),
       CONSTRAINT fk_restaurant FOREIGN KEY(restaurant_id) REFERENCES restaurant(id),
-      CONSTRAINT fk_user FOREIGN KEY(email) REFERENCES user_account(email)
+      CONSTRAINT fk_user FOREIGN KEY(admin_email) REFERENCES user_account(email)
 );
 CREATE TABLE table_info(
       restaurant_id SERIAL,
-      table_id SMALLSERIAL,
+      id SMALLSERIAL,
       capacity SMALLINT DEFAULT 0,
       average_time SMALLINT DEFAULT 0,
-      PRIMARY KEY(restaurant_id, table_id),
+      PRIMARY KEY(restaurant_id, id),
       CONSTRAINT fk_restaurant FOREIGN KEY(restaurant_id) REFERENCES restaurant(id)
 );
 CREATE TYPE reservation_approval_status AS ENUM('pending','rejected', 'approved');
 CREATE TABLE reservation(
-      email VARCHAR(100),
+      user_email VARCHAR(100),
       restaurant_id SERIAL,
       table_id SERIAL,
       reservation_date DATE NOT NULL,
@@ -41,7 +43,7 @@ CREATE TABLE reservation(
       amount SMALLINT,
       approval_status reservation_approval_status DEFAULT 'pending',
       payment_status BOOLEAN DEFAULT FALSE,
-      PRIMARY KEY(email, restaurant_id, table_id),
-      CONSTRAINT fk_user FOREIGN KEY(email) REFERENCES user_account(email),
-      CONSTRAINT fk_table FOREIGN KEY(restaurant_id, table_id) REFERENCES table_info(restaurant_id, table_id)
+      PRIMARY KEY(user_email, restaurant_id, table_id),
+      CONSTRAINT fk_user FOREIGN KEY(user_email) REFERENCES user_account(email),
+      CONSTRAINT fk_table FOREIGN KEY(restaurant_id, table_id) REFERENCES table_info(restaurant_id, id)
 );
