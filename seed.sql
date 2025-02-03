@@ -9,3 +9,9 @@ CALL create_restaurant('test4@email.com','Test','102','04:00:00','22:00:00','Eng
 
 CALL add_restaurant_admin_by_name_location('test1@email.com','test2@email.com','MACROEAT','Engineering Faculty, Chula');
 CALL add_restaurant_admin_by_name_location('test1@email.com','test2@email.com','Classic Chips','Engineering Faculty, Chula');
+CALL add_restaurant_admin_by_name_location('test4@email.com','test3@email.com','Test','Engineering Faculty, Chula');
+
+CALL create_table_by_name_location('test1@email.com','MACROEAT','Engineering Faculty, Chula',2,20);
+CALL create_table_by_name_location('test1@email.com','MACROEAT','Engineering Faculty, Chula',2,20);
+CALL create_table_by_name_location('test1@email.com','MACROEAT','Engineering Faculty, Chula',4,35);
+CALL create_table_by_name_location('test1@email.com','Classic Chips','Engineering Faculty, Chula',1,15);

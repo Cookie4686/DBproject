@@ -18,9 +18,11 @@ DROP PROCEDURE IF EXISTS add_restaurant_admin_by_id;
 DROP PROCEDURE IF EXISTS add_restaurant_admin_by_name_location;
 DROP PROCEDURE IF EXISTS valid_owner_chkerr;
 DROP PROCEDURE IF EXISTS valid_admin_chkerr;
+DROP FUNCTION get_restaurant_id;
 
 -- TABLE
-DROP PROCEDURE IF EXISTS add_restaurant_table;
+DROP PROCEDURE IF EXISTS create_table_by_id;
+DROP PROCEDURE IF EXISTS create_table_by_name_location;
 
 -- RESERVATION
 DROP PROCEDURE IF EXISTS reserve_table;

@@ -45,15 +45,8 @@ AS $$
 DECLARE
   restaurant_id int;
 BEGIN
-  SELECT id FROM restaurant
-  WHERE name = restaurant_name AND location = restaurant_location
-  INTO restaurant_id;
-  IF restaurant_id IS NULL THEN
-    RAISE EXCEPTION 'Invalid restaurant';
-  END IF;
-  CALL valid_owner_chkerr(user_email,restaurant_id);
-  INSERT INTO restaurant_admin(admin_email, restaurant_id)
-  VALUES (admin_email, restaurant_id);
+  SELECT * FROM get_restaurant_id(restaurant_name, restaurant_location) INTO restaurant_id;
+  CALL add_restaurant_admin_by_id(user_email, admin_email, restaurant_id);
 END; $$;
 
 CREATE OR REPLACE PROCEDURE valid_owner_chkerr(user_email VARCHAR, restaurant_id INT)
@@ -65,5 +58,22 @@ BEGIN
     WHERE owner_email = user_email AND id = restaurant_id
   ) IS NULL THEN
     RAISE EXCEPTION 'user is not this restaurant owner';
+  END IF;
+END; $$;
+
+CREATE OR REPLACE FUNCTION get_restaurant_id(input_name VARCHAR, input_location VARCHAR)
+  RETURNS int
+  LANGUAGE plpgsql
+AS $$
+DECLARE
+  restaurant_id int;
+BEGIN
+  SELECT id FROM restaurant
+  WHERE name = input_name AND location = input_location
+  INTO restaurant_id;
+  IF restaurant_id IS NULL THEN
+    RAISE EXCEPTION 'Invalid restaurant';
+  ELSE
+    RETURN restaurant_id;
   END IF;
 END; $$;
