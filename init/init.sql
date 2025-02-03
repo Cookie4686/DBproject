@@ -29,7 +29,7 @@ CREATE TABLE table_info(
       average_time SMALLINT DEFAULT 0,
       PRIMARY KEY(restaurant_id, code)
 );
-CREATE TYPE reservation_approval_status AS ENUM('pending','rejected', 'approved');
+CREATE TYPE reservation_approval_status AS ENUM('pending','canceled','rejected', 'approved');
 CREATE TABLE reservation(
       user_email VARCHAR(100) REFERENCES user_account(email),
       restaurant_id SERIAL,

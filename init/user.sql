@@ -1,5 +1,4 @@
--- REQUIREMENT 01
--- The system shall allow a user to register by specifying the name, telephone number, email, and password
+-- CREATE USER
 CREATE OR REPLACE PROCEDURE register_user(firstname VARCHAR,lastname VARCHAR, phone VARCHAR, email VARCHAR, password VARCHAR)
   LANGUAGE plpgsql
 AS $$

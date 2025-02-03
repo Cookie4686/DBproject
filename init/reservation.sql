@@ -1,9 +1,4 @@
--- TODO
--- REQUIREMENT 3.1
--- After login, the system shall allow the registered user to reserve up to 3 tables by
--- specifying the date and the preferred restaurant.
--- REQUIREMENT 3.2 The restaurant list is also provided to the user.
--- A restaurant information includes the name, address, telephone number, and open-close time.
+-- GET ALL RESTAURANT LIST
 CREATE OR REPLACE FUNCTION get_available_restaurant_list(pageNumber int)
   RETURNS TABLE(name VARCHAR, location VARCHAR, phone VARCHAR, available_time TEXT)
   LANGUAGE plpgsql
@@ -15,6 +10,7 @@ BEGIN
     OFFSET (pageNumber - 1) * 10
     LIMIT 10;
 END; $$;
+
 CREATE OR REPLACE FUNCTION get_available_restaurant_list(pageNumber int)
   RETURNS TABLE(name VARCHAR, location VARCHAR, phone VARCHAR, available_time TEXT)
   LANGUAGE plpgsql
