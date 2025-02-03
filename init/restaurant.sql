@@ -1,18 +1,3 @@
--- REQUIREMENT 3.2 The restaurant list is also provided to the user.
--- A restaurant information includes the name, address, telephone number, and open-close time.
-CREATE OR REPLACE FUNCTION get_restaurant_list(pageNumber int)
-  RETURNS TABLE(name VARCHAR, location VARCHAR, phone VARCHAR, available_time TEXT)
-  LANGUAGE plpgsql
-AS $$
-BEGIN
-  RETURN QUERY
-    SELECT R.name, R.location, R.phone, open_time || '-' || close_time AS available_time FROM restaurant R
-    ORDER BY R.name
-    OFFSET (pageNumber - 1) * 10
-    LIMIT 10;
-END; $$;
-
-
 -- USER CREATE RESTAURANT
 CREATE OR REPLACE PROCEDURE create_restaurant(user_email VARCHAR, name VARCHAR, phone VARCHAR, open_time TIME, close_time TIME, location VARCHAR)
   LANGUAGE plpgsql

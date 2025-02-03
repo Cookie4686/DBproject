@@ -5,7 +5,6 @@ DROP TABLE IF EXISTS restaurant_owner CASCADE;
 DROP TABLE IF EXISTS restaurant_admin CASCADE;
 DROP TABLE IF EXISTS table_info CASCADE;
 DROP TABLE IF EXISTS reservation CASCADE;
-DROP TYPE IF EXISTS reservation_approval_status;
 
 -- USER
 DROP PROCEDURE IF EXISTS register_user;
@@ -18,7 +17,7 @@ DROP PROCEDURE IF EXISTS add_restaurant_admin_by_id;
 DROP PROCEDURE IF EXISTS add_restaurant_admin_by_name_location;
 DROP PROCEDURE IF EXISTS valid_owner_chkerr;
 DROP PROCEDURE IF EXISTS valid_admin_chkerr;
-DROP FUNCTION get_restaurant_id;
+DROP FUNCTION IF EXISTS get_restaurant_id;
 
 -- TABLE
 DROP PROCEDURE IF EXISTS create_table_by_id;
@@ -26,3 +25,8 @@ DROP PROCEDURE IF EXISTS create_table_by_name_location;
 
 -- RESERVATION
 DROP PROCEDURE IF EXISTS reserve_table;
+DROP FUNCTION IF EXISTS get_user_reservation;
+DROP FUNCTION IF EXISTS get_restaurant_reservation;
+DROP PROCEDURE IF EXISTS edit_restaurant_reservation;
+
+DROP TYPE IF EXISTS reservation_approval_status;
