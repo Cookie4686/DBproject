@@ -13,11 +13,13 @@ BEGIN
 END; $$;
 
 -- RESERVE TABLE
-CREATE OR REPLACE PROCEDURE reserve_table_by_id(input_user_email VARCHAR, restaurant_id INT, table_code VARCHAR, reservation_time TIMESTAMP, person_count int)
+CREATE OR REPLACE PROCEDURE reserve_table_by_id(input_user_email VARCHAR, restaurant_id INT, table_code VARCHAR, input_reserve_time TIMESTAMP, person_count int)
   LANGUAGE plpgsql
 AS $$
 BEGIN
-  IF (SELECT COUNT(*) FROM reservation
+  IF input_reserve_time - CURRENT_TIMESTAMP <= '1 hour'
+  OR NOT is_table_available(restaurant_id, table_code, input_reserve_time)
+  OR (SELECT COUNT(*) FROM reservation
     WHERE user_email = input_user_email AND reserve_time >= now()
     AND (approval_status = 'pending' OR approval_status = 'approved')
   ) >= 3 THEN
@@ -25,7 +27,7 @@ BEGIN
     RETURN;
   END IF;
   INSERT INTO reservation(user_email, restaurant_id,table_code, reserve_time, person_count)
-  VALUES (input_user_email, restaurant_id, table_code, reservation_time, person_count);
+  VALUES (input_user_email, restaurant_id, table_code, input_reserve_time, person_count);
 END; $$;
 
 CREATE OR REPLACE PROCEDURE reserve_table_by_name_location(input_user_email VARCHAR, restaurant_name VARCHAR, restaurant_location VARCHAR, table_code VARCHAR, reservation_time TIMESTAMP, person_count int)
@@ -59,9 +61,30 @@ BEGIN
   ORDER BY reserve_time DESC;
 END; $$;
 
+-- REQUIREMENT 5
+-- The system shall allow the registered user to edit his/her restaurant reservation.
+CREATE OR REPLACE PROCEDURE edit_user_reservation(user_email VARCHAR, restaurant_id int, table_code VARCHAR, reserve_time TIMESTAMP, new_restaurant_id int, new_table_code VARCHAR, new_reserve_time TIMESTAMP, person_count int)
+  LANGUAGE plpgsql
+AS $$
+BEGIN
+  CALL delete_user_reservation(user_email,restaurant_id,table_code,reserve_time);
+  CALL reserve_table_by_id(user_email, new_restaurant_id, new_table_code, new_reserve_time, person_count);
+END;$$;
+
+-- REQUIREMENT 6
+-- The system shall allow the registered user to delete his/her restaurant reservation.
+CREATE OR REPLACE PROCEDURE delete_user_reservation(input_user_email VARCHAR, input_restaurant_id int, input_table_code VARCHAR, input_reserve_time TIMESTAMP)
+  LANGUAGE plpgsql
+AS $$
+BEGIN
+  UPDATE reservation
+  SET approval_status = 'canceled'
+  WHERE user_email = input_user_email AND restaurant_id = input_restaurant_id AND table_code = input_table_code AND reserve_time = input_reserve_time;
+END; $$;
+
 -- REQUIREMENT 7
 -- The system shall allow the admin to view any restaurant reservation.
-CREATE OR REPLACE FUNCTION get_restaurant_reservation(user_email VARCHAR, restaurant_name VARCHAR, restaurant_location VARCHAR)
+CREATE OR REPLACE FUNCTION get_restaurant_reservation(input_user_email VARCHAR, restaurant_name VARCHAR, restaurant_location VARCHAR)
   RETURNS SETOF reservation
   LANGUAGE plpgsql
 AS $$
@@ -69,7 +92,7 @@ DECLARE
   local_restaurant_id int;
 BEGIN
   SELECT * FROM get_restaurant_id(restaurant_name, restaurant_location) INTO local_restaurant_id;
-  CALL valid_admin_chkerr(user_email,local_restaurant_id);
+  CALL valid_admin_chkerr(input_user_email,local_restaurant_id);
   RETURN QUERY
   SELECT * FROM reservation
   WHERE restaurant_id = local_restaurant_id
@@ -79,20 +102,30 @@ END; $$;
 -- TODO
 -- REQUIREMENT 8
 -- The system shall allow the admin to edit any restaurant reservation.
-CREATE OR REPLACE PROCEDURE edit_restaurant_reservation(input_user_email VARCHAR, input_restaurant_id int, input_table_id int, input_reserve_time TIME, input_approval_status VARCHAR)
+CREATE OR REPLACE PROCEDURE edit_restaurant_reservation(input_user_email VARCHAR, input_customer_email VARCHAR, input_restaurant_id int, input_table_code VARCHAR, input_reserve_time TIMESTAMP, input_approval_status reservation_approval_status)
   LANGUAGE plpgsql
 AS $$
 BEGIN
-  CALL valid_owner_chkerr(input_user_email,input_restaurant_id);
+  CALL valid_admin_chkerr(input_user_email,input_restaurant_id);
   UPDATE reservation 
   SET approval_status = input_approval_status
-  WHERE user_email = input_user_email AND restaurant_id = input_restaurant_id AND table_id = input_table_id AND reserve_time = input_reserve_time;
+  WHERE user_email = input_customer_email AND restaurant_id = input_restaurant_id
+  AND table_code = input_table_code AND reserve_time = input_reserve_time
+  AND approval_status != 'canceled';
 END; $$;
 
-
-
 -- REQUIREMENT 9
--- The system shall allow the admin to edit any restaurant reservation.
+-- The system shall allow the admin to delete any restaurant reservation.
+CREATE OR REPLACE PROCEDURE delete_restaurant_reservation(input_user_email VARCHAR, input_customer_email VARCHAR, input_restaurant_id int, input_table_code VARCHAR, input_reserve_time TIMESTAMP)
+  LANGUAGE plpgsql
+AS $$
+BEGIN
+  CALL valid_admin_chkerr(input_user_email,input_restaurant_id);
+  UPDATE reservation 
+  SET approval_status = 'rejected'
+  WHERE user_email = input_customer_email AND restaurant_id = input_restaurant_id
+  AND table_code = input_table_code AND reserve_time = input_reserve_time;
+END; $$;
 
 
 -- HELPER FUNCTION
@@ -127,6 +160,7 @@ BEGIN
   RETURN (
     SELECT reserve_time FROM reservation
     WHERE restaurant_id = input_restaurant_id AND table_code = input_table_code
+    AND (approval_status = 'pending' OR approval_status = 'approved')
     AND input_time - reserve_time <= '1 hour' AND input_time - reserve_time >= '-1 hour'
   ) IS NULL;
 END; $$;

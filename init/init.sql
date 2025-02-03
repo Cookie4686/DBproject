@@ -39,6 +39,6 @@ CREATE TABLE reservation(
       approval_status reservation_approval_status DEFAULT 'pending',
       payment_status BOOLEAN DEFAULT FALSE,
       reserved_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE(user_email, restaurant_id, table_code, reserve_time),
+      PRIMARY KEY(user_email, restaurant_id, table_code, reserve_time),
       FOREIGN KEY(restaurant_id, table_code) REFERENCES table_info(restaurant_id, table_code)
 );

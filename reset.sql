@@ -27,8 +27,12 @@ DROP FUNCTION IF EXISTS get_available_restaurant;
 DROP FUNCTION IF EXISTS get_user_reservation;
 DROP PROCEDURE IF EXISTS reserve_table_by_id;
 DROP PROCEDURE IF EXISTS reserve_table_by_name_location;
+DROP FUNCTION IF EXISTS get_user_reservation;
+DROP PROCEDURE IF EXISTS edit_user_reservation;
+DROP PROCEDURE IF EXISTS delete_user_reservation;
 DROP FUNCTION IF EXISTS get_restaurant_reservation;
 DROP PROCEDURE IF EXISTS edit_restaurant_reservation;
+DROP PROCEDURE IF EXISTS delete_restaurant_reservation;
 
 DROP FUNCTION IF EXISTS get_available_restaurant_table;
 DROP FUNCTION IF EXISTS is_restaurant_available;
