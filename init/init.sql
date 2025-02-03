@@ -27,18 +27,18 @@ CREATE TABLE table_info(
       code VARCHAR,
       capacity SMALLINT DEFAULT 0,
       average_time SMALLINT DEFAULT 0,
-      PRIMARY KEY(restaurant_id, id)
+      PRIMARY KEY(restaurant_id, code)
 );
 CREATE TYPE reservation_approval_status AS ENUM('pending','rejected', 'approved');
 CREATE TABLE reservation(
       user_email VARCHAR(100) REFERENCES user_account(email),
       restaurant_id SERIAL,
-      table_code SERIAL,
+      table_code VARCHAR,
       reserve_time TIMESTAMP,
       person_count SMALLINT,
       approval_status reservation_approval_status DEFAULT 'pending',
       payment_status BOOLEAN DEFAULT FALSE,
       reserved_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-      UNIQUE(user_email, restaurant_id, table_id, time),
+      UNIQUE(user_email, restaurant_id, table_code, reserve_time),
       CONSTRAINT fk_table FOREIGN KEY(restaurant_id, table_code) REFERENCES table_info(restaurant_id, code)
 );
