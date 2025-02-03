@@ -36,7 +36,10 @@ SELECT * FROM checkPassword('test5@email.com','jakecool');
 -- After login, the system shall allow the registered user to reserve up to 3 tables by
 -- specifying the date and the preferred restaurant. The restaurant list is also provided
 -- to the user. A restaurant information includes the name, address, telephone number, and open-close time
-
+CALL reserve_table('test3@email.com', 1, '2S1', '2025-02-02', 2);
+CALL reserve_table('test3@email.com', 1, '4S1', '2025-02-05', 4);
+CALL reserve_table('test3@email.com', 1, '4S1', '2025-02-06', 4);
+CALL reserve_table('test3@email.com', 1, '4S1', '2025-02-07', 4);
 
 -- REQUIREMENT 4,5,6
 -- The system shall allow the registered user to view/edit/delete/ his/her restaurant reservation.

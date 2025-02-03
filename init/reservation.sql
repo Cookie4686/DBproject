@@ -11,24 +11,31 @@ BEGIN
     LIMIT 10;
 END; $$;
 
-CREATE OR REPLACE FUNCTION get_available_restaurant_list(pageNumber int)
-  RETURNS TABLE(name VARCHAR, location VARCHAR, phone VARCHAR, available_time TEXT)
+-- REQUIREMENT 3
+
+CREATE OR REPLACE FUNCTION get_available_restaurant(input_time TIMESTAMP)
+  RETURNS SETOF restaurant
   LANGUAGE plpgsql
 AS $$
 BEGIN
   RETURN QUERY
-    SELECT R.name, R.location, R.phone, open_time || '-' || close_time AS available_time FROM restaurant R
-    ORDER BY R.name
-    OFFSET (pageNumber - 1) * 10
-    LIMIT 10;
+  SELECT * FROM restaurant
+  WHERE get_available_restaurant_table(id, input_time) IS NOT NULL;
 END; $$;
 
-CREATE OR REPLACE PROCEDURE reserve_table(user_email VARCHAR, restaurant_id INT, table_id INT, reservation_time TIMESTAMP, person_count int)
+CREATE OR REPLACE PROCEDURE reserve_table(input_user_email VARCHAR, restaurant_id INT, table_code VARCHAR, reservation_time TIMESTAMP, person_count int)
   LANGUAGE plpgsql
 AS $$
 BEGIN
-  INSERT INTO reservation(user_email, restaurant_id,table_id, time,person_count)
-  VALUES (user_email, restaurant_id, table_id, reservation_time, person_count);
+  IF (SELECT COUNT(*) FROM reservation
+    WHERE user_email = input_user_email AND reserve_time >= now()
+    AND (approval_status = 'pending' OR approval_status = 'approved')
+  ) >= 3 THEN
+    RAISE EXCEPTION 'reservation limit reached';
+    RETURN;
+  END IF;
+  INSERT INTO reservation(user_email, restaurant_id,table_code, reserve_time, person_count)
+  VALUES (user_email, restaurant_id, table_code, reservation_time, person_count);
 END; $$;
 
 -- REQUIREMENT 4
@@ -82,6 +89,38 @@ END; $$;
 
 -- REQUIREMENT 9
 -- The system shall allow the admin to edit any restaurant reservation.
+
+
+
+
+-- HELPER FUNCTION
+CREATE OR REPLACE FUNCTION get_available_restaurant_table(input_restaurant_id int, input_time TIMESTAMP)
+  RETURNS SETOF table_info
+  LANGUAGE plpgsql
+AS $$
+BEGIN
+  RETURN QUERY
+  SELECT * FROM table_info
+  WHERE restaurant_id = input_restaurant_id
+  AND is_table_available(input_restaurant_id, code, input_time) = TRUE;
+END; $$;
+
+CREATE OR REPLACE FUNCTION is_table_available(input_restaurant_id int, input_table_code VARCHAR, input_time TIMESTAMP)
+  RETURNS BOOLEAN
+  LANGUAGE plpgsql
+AS $$
+BEGIN
+  IF (
+    SELECT reserve_time FROM reservation
+    WHERE restaurant_id = input_restaurant_id AND table_code = input_table_code
+    AND input_time - reserve_time <= '1 hour' AND input_time - reserve_time >= '-1 hour'
+  ) IS NULL THEN
+    RETURN TRUE;
+  ELSE
+    RETURN FALSE;
+  END IF;
+END; $$;
+
 
 
 -- CREATE OR REPLACE FUNCTION restaurant_available_table(input_restaurant_id int, input_time TIMESTAMP)

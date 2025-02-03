@@ -7,7 +7,7 @@ DECLARE
 BEGIN
 INSERT INTO restaurant(name, phone, open_time, close_time, location, owner_email)
   VALUES (name, phone, open_time, close_time, location, user_email)
-  RETURNING id
+  RETURNING restaurant_id
 INTO restaurant_gen_id;
 INSERT INTO restaurant_admin(admin_email, restaurant_id)
   VALUES (user_email, restaurant_gen_id);
@@ -39,7 +39,7 @@ CREATE OR REPLACE PROCEDURE valid_owner_chkerr(user_email VARCHAR, restaurant_id
 AS $$
 BEGIN
   IF (
-    SELECT id FROM restaurant
+    SELECT restaurant_id FROM restaurant
     WHERE owner_email = user_email AND id = restaurant_id
   ) IS NULL THEN
     RAISE EXCEPTION 'user is not this restaurant owner';
@@ -54,7 +54,7 @@ AS $$
 DECLARE
   restaurant_id int;
 BEGIN
-  SELECT id FROM restaurant
+  SELECT restaurant_id FROM restaurant
   WHERE name = input_name AND location = input_location
   INTO restaurant_id;
   IF restaurant_id IS NULL THEN
