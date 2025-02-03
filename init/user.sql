@@ -1,9 +1,9 @@
 -- CREATE USER
-CREATE OR REPLACE PROCEDURE register_user(firstname VARCHAR,lastname VARCHAR, phone VARCHAR, email VARCHAR, password VARCHAR)
+CREATE OR REPLACE PROCEDURE register_user(firstname VARCHAR, lastname VARCHAR, phone VARCHAR, email VARCHAR, password VARCHAR)
   LANGUAGE plpgsql
 AS $$
 BEGIN
-  INSERT INTO user_account(firstname, lastname, phone, email, password)
+  INSERT INTO user_account(firstname, lastname, phone, user_email, password)
   VALUES (firstname, lastname, phone, email, password);
 END; $$;
 
@@ -18,9 +18,8 @@ CREATE OR REPLACE FUNCTION checkPassword(input_email VARCHAR, input_password VAR
   LANGUAGE plpgsql
 AS $$
 BEGIN
-  IF (SELECT email FROM user_account WHERE email = input_email AND password = input_password) IS NULL THEN
-    RETURN FALSE;
-  ELSE
-    RETURN TRUE;
-  END IF;
+  RETURN (
+    SELECT user_email FROM user_account
+    WHERE user_email = input_email AND password = input_password
+  ) IS NOT NULL;
 END; $$;

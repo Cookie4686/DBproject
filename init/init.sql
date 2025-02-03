@@ -19,8 +19,8 @@ CREATE TABLE restaurant(
 );
 CREATE TABLE restaurant_admin(
       restaurant_id SERIAL REFERENCES restaurant(restaurant_id),
-      admin_email VARCHAR(100) REFERENCES user_account(user_email),
-      PRIMARY KEY(restaurant_id, admin_email)
+      user_email VARCHAR(100) REFERENCES user_account(user_email),
+      PRIMARY KEY(restaurant_id, user_email)
 );
 CREATE TABLE table_info(
       restaurant_id SERIAL REFERENCES restaurant(restaurant_id),
@@ -40,5 +40,5 @@ CREATE TABLE reservation(
       payment_status BOOLEAN DEFAULT FALSE,
       reserved_on TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
       UNIQUE(user_email, restaurant_id, table_code, reserve_time),
-      CONSTRAINT fk_table FOREIGN KEY(restaurant_id, table_code) REFERENCES table_info(restaurant_id, table_code)
+      FOREIGN KEY(restaurant_id, table_code) REFERENCES table_info(restaurant_id, table_code)
 );
