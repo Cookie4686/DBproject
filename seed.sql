@@ -11,7 +11,7 @@ CALL add_restaurant_admin_by_name_location('test1@email.com','test2@email.com','
 CALL add_restaurant_admin_by_name_location('test1@email.com','test2@email.com','Classic Chips','Engineering Faculty, Chula');
 CALL add_restaurant_admin_by_name_location('test4@email.com','test3@email.com','Test','Engineering Faculty, Chula');
 
-CALL create_table_by_name_location('test1@email.com','MACROEAT','Engineering Faculty, Chula',2,20);
-CALL create_table_by_name_location('test1@email.com','MACROEAT','Engineering Faculty, Chula',2,20);
-CALL create_table_by_name_location('test1@email.com','MACROEAT','Engineering Faculty, Chula',4,35);
-CALL create_table_by_name_location('test1@email.com','Classic Chips','Engineering Faculty, Chula',1,15);
+CALL create_table_by_name_location('test1@email.com','MACROEAT','Engineering Faculty, Chula','2S1',2,20);
+CALL create_table_by_name_location('test1@email.com','MACROEAT','Engineering Faculty, Chula','2S2',2,20);
+CALL create_table_by_name_location('test1@email.com','MACROEAT','Engineering Faculty, Chula','4S1',4,35);
+CALL create_table_by_name_location('test1@email.com','Classic Chips','Engineering Faculty, Chula','1S1',1,15);
