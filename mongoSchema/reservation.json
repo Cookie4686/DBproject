@@ -1,0 +1,22 @@
+{
+  "title": "reservation",
+  "required": [
+    "_id",
+    "restaurant_id",
+    "table_code",
+    "reserve_time",
+    "approval_status",
+    "payment_status",
+    "reserved_on"
+  ],
+  "properties": {
+    "_id": { "bsonType": "objectId" },
+    "restaurant_id": { "bsonType": "objectId" },
+    "table_code": { "bsonType": "string" },
+    "reserve_time": { "bsonType": "timestamp" },
+    "person_count": { "bsonType": "int" },
+    "approval_status": { "bsonType": "string" },
+    "payment_status": { "bsonType": "bool" },
+    "reserved_on": { "bsonType": "timestamp" }
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "title": "user",
+  "required": ["_id", "email", "firstname", "lastname", "phone", "password"],
+  "properties": {
+    "_id": { "bsonType": "objectId" },
+    "email": { "bsonType": "string" },
+    "firstname": { "bsonType": "string" },
+    "lastname": { "bsonType": "string" },
+    "phone": { "bsonType": "string" },
+    "password": { "bsonType": "string" },
+    "restaurant_owner": {
+      "bsonType": "array",
+      "_id": { "bsonType": "objectId" }
+    },
+    "restaurant_admin": {
+      "bsonType": "array",
+      "_id": { "bsonType": "objectId" }
+    }
+  }
+}

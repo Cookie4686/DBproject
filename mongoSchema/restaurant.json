@@ -1,0 +1,36 @@
+{
+  "title": "restaurant",
+  "required": [
+    "_id",
+    "name",
+    "location",
+    "phone",
+    "open_time",
+    "close_time",
+    "owner"
+  ],
+  "properties": {
+    "_id": { "bsonType": "objectId" },
+    "name": { "bsonType": "string" },
+    "location": { "bsonType": "string" },
+    "phone": { "bsonType": "string" },
+    "min_price": { "bsonType": "int" },
+    "max_price": { "bsonType": "int" },
+    "open_time": { "bsonType": "timestamp" },
+    "close_time": { "bsonType": "timestamp" },
+    "owner": { "bsonType": "objectId" },
+    "admin": {
+      "bsonType": "array",
+      "_id": { "bsonType": "objectId" }
+    },
+    "table": {
+      "bsonType": "array",
+      "items": {
+        "bsonType": "object",
+        "code": { "bsonType": "string" },
+        "capacity": { "bsonType": "int" },
+        "average_time": { "bsonType": "int" }
+      }
+    }
+  }
+}
