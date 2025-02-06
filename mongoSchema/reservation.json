@@ -1,22 +1,29 @@
 {
-  "title": "reservation",
-  "required": [
-    "_id",
-    "restaurant_id",
-    "table_code",
-    "reserve_time",
-    "approval_status",
-    "payment_status",
-    "reserved_on"
-  ],
-  "properties": {
-    "_id": { "bsonType": "objectId" },
-    "restaurant_id": { "bsonType": "objectId" },
-    "table_code": { "bsonType": "string" },
-    "reserve_time": { "bsonType": "timestamp" },
-    "person_count": { "bsonType": "int" },
-    "approval_status": { "bsonType": "string" },
-    "payment_status": { "bsonType": "bool" },
-    "reserved_on": { "bsonType": "timestamp" }
+  "$jsonSchema": {
+    "title": "reservation",
+    "bsonType": "object",
+    "required": [
+      "_id",
+      "user_email",
+      "restaurant_id",
+      "table_code",
+      "reserve_time",
+      "approval_status",
+      "payment_status",
+      "reserved_on"
+    ],
+    "properties": {
+      "_id": { "bsonType": "objectId" },
+      "user_email": { "bsonType": "string" },
+      "restaurant_id": { "bsonType": "int" },
+      "table_code": { "bsonType": "string" },
+      "reserve_time": { "bsonType": "date" },
+      "person_count": { "bsonType": "int" },
+      "approval_status": {
+        "enum": ["canceled", "pending", "approved", "rejected"]
+      },
+      "payment_status": { "bsonType": "bool" },
+      "reserved_on": { "bsonType": "date" }
+    }
   }
 }

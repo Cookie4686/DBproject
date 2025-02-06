@@ -1,35 +1,48 @@
 {
-  "title": "restaurant",
-  "required": [
-    "_id",
-    "name",
-    "location",
-    "phone",
-    "open_time",
-    "close_time",
-    "owner"
-  ],
-  "properties": {
-    "_id": { "bsonType": "objectId" },
-    "name": { "bsonType": "string" },
-    "location": { "bsonType": "string" },
-    "phone": { "bsonType": "string" },
-    "min_price": { "bsonType": "int" },
-    "max_price": { "bsonType": "int" },
-    "open_time": { "bsonType": "timestamp" },
-    "close_time": { "bsonType": "timestamp" },
-    "owner": { "bsonType": "objectId" },
-    "admin": {
-      "bsonType": "array",
-      "_id": { "bsonType": "objectId" }
-    },
-    "table": {
-      "bsonType": "array",
-      "items": {
-        "bsonType": "object",
-        "code": { "bsonType": "string" },
-        "capacity": { "bsonType": "int" },
-        "average_time": { "bsonType": "int" }
+  "$jsonSchema": {
+    "title": "restaurant",
+    "bsonType": "object",
+    "required": [
+      "_id",
+      "restaurant_id",
+      "name",
+      "location",
+      "phone",
+      "open_time",
+      "close_time",
+      "owner_email"
+    ],
+    "properties": {
+      "_id": { "bsonType": "objectId" },
+      "restaurant_id": { "bsonType": "int" },
+      "name": { "bsonType": "string" },
+      "location": { "bsonType": "string" },
+      "phone": {
+        "bsonType": "string"
+      },
+      "min_price": { "bsonType": "int" },
+      "max_price": { "bsonType": "int" },
+      "open_time": {
+        "bsonType": "string",
+        "pattern": "^([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+      },
+      "close_time": {
+        "bsonType": "string",
+        "pattern": "^([01]?[0-9]|2[0-3]):[0-5][0-9]:[0-5][0-9]$"
+      },
+      "owner_email": { "bsonType": "string" },
+      "admin": { "bsonType": ["array"], "items": { "bsonType": "string" } },
+      "table": {
+        "bsonType": ["array"],
+        "items": {
+          "bsonType": "object",
+          "required": ["code"],
+          "properties": {
+            "code": { "bsonType": "string" },
+            "capacity": { "bsonType": "int" },
+            "average_time": { "bsonType": "int" }
+          }
+        }
       }
     }
   }
