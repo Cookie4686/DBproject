@@ -18,7 +18,8 @@
       "name": { "bsonType": "string" },
       "location": { "bsonType": "string" },
       "phone": {
-        "bsonType": "string"
+        "bsonType": "string",
+        "pattern": "^[0-9]{3}-[0-9]{7}$"
       },
       "min_price": { "bsonType": "int" },
       "max_price": { "bsonType": "int" },

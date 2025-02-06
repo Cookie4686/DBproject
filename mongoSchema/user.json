@@ -14,14 +14,14 @@
       },
       "password": { "bsonType": "string" },
       "restaurant_owner": {
-        "bsonType": ["string"],
+        "bsonType": "array",
         "uniqueItems": true,
-        "description": "restaurant_id"
+        "items": { "bsonType": "int" }
       },
       "restaurant_admin": {
-        "bsonType": ["string"],
+        "bsonType": ["array"],
         "uniqueItems": true,
-        "description": "restaurant_id"
+        "items": { "bsonType": "int" }
       }
     }
   }

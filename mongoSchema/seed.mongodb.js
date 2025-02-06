@@ -11,6 +11,7 @@ db.user.insertMany([
     phone: "033-1009001",
     email: "test1@email.com",
     password: "adamcool",
+    restaurant_owner: [1, 2],
   },
   {
     firstname: "David",
@@ -18,6 +19,7 @@ db.user.insertMany([
     phone: "033-1009002",
     email: "test2@email.com",
     password: "davidcool",
+    restaurant_admin: [1, 2],
   },
   {
     firstname: "John",
@@ -25,6 +27,7 @@ db.user.insertMany([
     phone: "033-1009003",
     email: "test3@email.com",
     password: "johncool",
+    restaurant_admin: [3],
   },
   {
     firstname: "Joe",
@@ -32,6 +35,7 @@ db.user.insertMany([
     phone: "033-1009004",
     email: "test4@email.com",
     password: "joecool",
+    restaurant_owner: [3],
   },
   {
     firstname: "Jake",
