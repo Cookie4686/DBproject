@@ -42,18 +42,21 @@ SELECT * FROM table_info;
 -- to the user. A restaurant information includes the name, address, telephone number, and open-close time
 CALL reserve_table_by_name_location('test1@email.com', 'MACROEAT','Engineering Faculty, Chula', '2S1', '2025-05-02 17:00:00', 2);
 CALL reserve_table_by_name_location('test2@email.com', 'MACROEAT','Engineering Faculty, Chula', '4S1', '2025-05-02 16:30:00', 4);
+SELECT * FROM reservation;
+
 SELECT * FROM get_available_restaurant('2025-05-02 17:00:00');
 
 -- REQUIREMENT 4,5,6
 -- The system shall allow the registered user to view/edit/delete/ his/her restaurant reservation.
 SELECT * FROM get_user_reservation('test2@email.com');
 CALL edit_user_reservation('test2@email.com',1,'4S1','2025-05-02 16:30:00',1,'2S2','2025-05-02 16:30:00',2);
+SELECT * FROM get_user_reservation('test2@email.com');
 CALL delete_user_reservation('test2@email.com',1,'2S2','2025-05-02 16:30:00');
 SELECT * FROM get_user_reservation('test2@email.com');
 
 -- REQUIREMENT 7,8,9
 -- The system shall allow the admin to view/edit/delete any restaurant reservation.
-CALL reserve_table_by_id('test2@email.com', 1, '2S1', '2025-05-02 18:30:00', 2);
+CALL reserve_table_by_name_location('test2@email.com', 'MACROEAT','Engineering Faculty, Chula', '2S1', '2025-05-02 18:30:00', 2);
 SELECT * FROM get_restaurant_reservation('test1@email.com','MACROEAT','Engineering Faculty, Chula');
 CALL edit_restaurant_reservation('test1@email.com', 'test2@email.com', 1, '2S1', '2025-05-02 18:30:00', 'approved');
 SELECT * FROM get_restaurant_reservation('test2@email.com','MACROEAT','Engineering Faculty, Chula');
